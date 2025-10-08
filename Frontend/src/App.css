@@ -1,0 +1,29 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #fafafa;
+}
+input,
+select,
+button {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+label {
+  display: grid;
+  gap: 4px;
+  font-size: 14px;
+}
+button {
+  cursor: pointer;
+}
+a {
+  color: #0b5bd3;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
