@@ -22,6 +22,7 @@ async function bootstrap() {
   app.getHttpAdapter().get('/api-json', (_req, res) => res.json(doc));
 
   const cfg = app.get(ConfigService);
+
   const port = Number(cfg.get('PORT')) || 5000;
   await app.listen(port);
   // eslint-disable-next-line no-console

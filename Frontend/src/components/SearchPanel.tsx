@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import api from "../api";
+import "./SearchPanel.css";
 
 type Sort = "asc" | "desc" | "";
 
@@ -47,10 +48,10 @@ export default function SearchPanel() {
   };
 
   return (
-    <div>
+    <div className="search-container">
       <h2>Search GitHub Repositories</h2>
 
-      <div style={{ display: "grid", gap: 8, maxWidth: 720, marginBottom: 12 }}>
+      <div className="search-controls">
         <label>
           Search
           <input
@@ -61,7 +62,7 @@ export default function SearchPanel() {
           />
         </label>
 
-        <div style={{ display: "flex", gap: 12, alignItems: "flex-end" }}>
+        <div className="search-filters">
           <label>
             Sort
             <select
@@ -74,7 +75,7 @@ export default function SearchPanel() {
             </select>
           </label>
 
-          <label style={{ flex: 1 }}>
+          <label className="ignore-field">
             Ignore (name contains)
             <input
               type="text"
@@ -90,42 +91,25 @@ export default function SearchPanel() {
         </div>
       </div>
 
-      {error && <div style={{ color: "crimson", marginTop: 8 }}>{error}</div>}
+      {error && <div className="search-error">{error}</div>}
 
-      <ul
-        style={{
-          listStyle: "none",
-          padding: 0,
-          marginTop: 16,
-          display: "grid",
-          gap: 12,
-        }}
-      >
+      <ul className="repo-list">
         {results.map((repo) => (
-          <li
-            key={repo.id}
-            style={{ border: "1px solid #eee", padding: 12, borderRadius: 8 }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                gap: 12,
-              }}
-            >
+          <li key={repo.id} className="repo-item">
+            <div className="repo-info">
               <div>
                 <a
                   href={repo.html_url}
                   target="_blank"
                   rel="noreferrer"
-                  style={{ fontWeight: 600 }}
+                  className="repo-link"
                 >
                   {repo.full_name}
                 </a>
-                <div style={{ color: "#666", marginTop: 4 }}>
+                <div className="repo-description">
                   {repo.description || "No description"}
                 </div>
-                <div style={{ marginTop: 6, fontSize: 14, color: "#333" }}>
+                <div className="repo-meta">
                   ⭐ {repo.stargazers_count} &nbsp;·&nbsp;{" "}
                   {repo.language || "Unknown"}
                 </div>
@@ -134,7 +118,7 @@ export default function SearchPanel() {
           </li>
         ))}
         {!loading && results.length === 0 && !error && (
-          <li style={{ color: "#666" }}>No results yet. Try a search.</li>
+          <li className="repo-empty">No results yet. Try a search.</li>
         )}
       </ul>
     </div>

@@ -1,24 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import api, { setToken } from "../api";
-import "./AuthPanel.css";
+import "./LoginPanel.css";
 
-interface Props {
-  onAuthed: () => void;
-}
-
-export default function AuthPanel({ onAuthed }: Props) {
-  const [mode, setMode] = useState<"login" | "register">("register");
+export default function LoginPanel({ onAuthed }: { onAuthed: () => void }) {
+  const [mode, setMode] = useState<"login" | "register">("login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const [loading, setLoading] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
-  const submit = async () => {
-    setMsg(null);
+  async function submit() {
+    setBusy(true);
     setErr(null);
-    setLoading(true);
+    setMsg(null);
     try {
       if (mode === "register") {
         await api.post("/auth/register", { username, password });
@@ -28,27 +23,26 @@ export default function AuthPanel({ onAuthed }: Props) {
         const { data } = await api.post("/auth/login", { username, password });
         if (data?.token) {
           setToken(data.token);
-          setMsg("Logged in!");
           onAuthed();
         }
       }
     } catch (e: any) {
       setErr(e?.response?.data?.message || e.message || "Request failed");
     } finally {
-      setLoading(false);
+      setBusy(false);
     }
-  };
-
-  const disabled = !username || !password || loading;
+  }
 
   return (
-    <div className="auth-container">
-      <h2>{mode === "register" ? "Register" : "Login"}</h2>
-      <div className="auth-form">
+    <div className="login-container">
+      <h2 className="login-heading">
+        {mode === "login" ? "Login" : "Register"}
+      </h2>
+
+      <div className="login-form">
         <label>
           Username
           <input
-            type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="alice"
@@ -61,35 +55,20 @@ export default function AuthPanel({ onAuthed }: Props) {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="******"
+            placeholder="••••••"
           />
         </label>
 
-        <button onClick={submit} disabled={disabled} className="my-btn">
-          {loading
-            ? "Please wait..."
-            : mode === "register"
-            ? "Register"
-            : "Login"}
+        <button
+          onClick={submit}
+          disabled={busy || !username || !password}
+          className="login-btn"
+        >
+          {busy ? "Please wait…" : mode === "login" ? "Login" : "Register"}
         </button>
 
         <small>
-          {mode === "register" ? (
-            <>
-              Already have an account?{" "}
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setMode("login");
-                  setMsg(null);
-                  setErr(null);
-                }}
-              >
-                Switch to Login
-              </a>
-            </>
-          ) : (
+          {mode === "login" ? (
             <>
               New user?{" "}
               <a
@@ -97,18 +76,33 @@ export default function AuthPanel({ onAuthed }: Props) {
                 onClick={(e) => {
                   e.preventDefault();
                   setMode("register");
-                  setMsg(null);
                   setErr(null);
+                  setMsg(null);
                 }}
               >
-                Switch to Register
+                Create an account
+              </a>
+            </>
+          ) : (
+            <>
+              Already have an account?{" "}
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMode("login");
+                  setErr(null);
+                  setMsg(null);
+                }}
+              >
+                Log in
               </a>
             </>
           )}
         </small>
 
-        {msg && <div className="auth-msg success">{msg}</div>}
-        {err && <div className="auth-msg error">{err}</div>}
+        {msg && <div className="login-msg success">{msg}</div>}
+        {err && <div className="login-msg error">{err}</div>}
       </div>
     </div>
   );

@@ -1,29 +1,35 @@
-* {
-  box-sizing: border-box;
+.container {
+  max-width: 720px;
+  margin: 60px auto;
+  font-family: system-ui, sans-serif;
 }
-body {
-  margin: 0;
-  background: #fafafa;
+
+.divider {
+  margin: 16px 0;
+  color: #666;
 }
-input,
-select,
-button {
-  padding: 8px;
+
+.divider span {
+  margin-right: 8px;
+}
+
+.github-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  border-radius: 6px;
-}
-label {
-  display: grid;
-  gap: 4px;
-  font-size: 14px;
-}
-button {
+  text-decoration: none;
   cursor: pointer;
 }
-a {
-  color: #0b5bd3;
-  text-decoration: none;
+
+.main-container {
+  max-width: 900px;
+  margin: 40px auto;
+  font-family: system-ui, sans-serif;
 }
-a:hover {
-  text-decoration: underline;
+
+.logout-wrapper {
+  margin-bottom: 16px;
 }
